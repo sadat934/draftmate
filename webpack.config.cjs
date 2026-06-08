@@ -45,10 +45,6 @@ module.exports = {
         use: {
           loader: 'babel-loader'
         }
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
       }
     ]
   },
@@ -72,6 +68,7 @@ module.exports = {
       patterns: [
         { from: 'assets', to: 'assets' },
         { from: 'payments', to: 'payments' },
+        { from: 'taskpane/taskpane.css', to: 'taskpane/taskpane.css' },
         { from: 'manifest.production.xml', to: 'manifest.xml' }
       ]
     })
