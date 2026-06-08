@@ -16,20 +16,48 @@ async function submit(mode) {
 
   try {
     message.textContent = "Signing in...";
-    const path = mode === "signup" ? CONFIG.endpoints.signup : CONFIG.endpoints.login;
-    const response = await fetch(apiUrl(path), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    });
-
-    if (!response.ok) {
-      throw new Error(await response.text());
+    
+    // Offline authentication - store in localStorage
+    const users = JSON.parse(localStorage.getItem('draftmate_users') || '{}');
+    
+    if (mode === "signup") {
+      if (users[email]) {
+        throw new Error("Account already exists. Please sign in.");
+      }
+      
+      // Create new user
+      const trialEndsAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+      users[email] = {
+        email,
+        passwordHash: btoa(password), // Simple encoding (not secure, but works offline)
+        plan: "free",
+        trialEndsAt,
+        createdAt: new Date().toISOString()
+      };
+      
+      localStorage.setItem('draftmate_users', JSON.stringify(users));
+    } else {
+      // Login
+      if (!users[email]) {
+        throw new Error("Account not found. Please create an account.");
+      }
+      
+      if (users[email].passwordHash !== btoa(password)) {
+        throw new Error("Incorrect password.");
+      }
     }
-
-    const session = await response.json();
+    
+    // Create session
+    const session = {
+      token: 'offline_' + Math.random().toString(36).substring(2),
+      email,
+      plan: users[email].plan,
+      trialEndsAt: users[email].trialEndsAt
+    };
+    
     setSession(session);
     window.location.replace("../taskpane/taskpane.html");
+    
   } catch (error) {
     message.textContent = error.message;
   }
