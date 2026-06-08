@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Office.js Test</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+</head>
+<body>
+    <h1>Office.js Test Page</h1>
+    <div id="status">Loading...</div>
+    <div id="info"></div>
+    
+    <script>
+        document.getElementById('status').textContent = 'Office object exists: ' + (typeof Office !== 'undefined');
+        
+        if (typeof Office !== 'undefined') {
+            Office.onReady((info) => {
+                document.getElementById('status').textContent = 'Office.js loaded successfully!';
+                document.getElementById('info').innerHTML = 
+                    'Host: ' + info.host + '<br>' +
+                    'Platform: ' + info.platform + '<br>' +
+                    'Office version detected!';
+            });
+        } else {
+            document.getElementById('status').textContent = 'ERROR: Office.js not loaded';
+        }
+    </script>
+</body>
+</html>

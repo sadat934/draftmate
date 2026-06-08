@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Plans - DraftMate</title>
+    <link rel="stylesheet" href="../taskpane/taskpane.css">
+    <script type="module" src="./plans.js"></script>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div class="brand">
+          <img src="../assets/logo.svg" alt="" width="34" height="34">
+          <div>
+            <h1>DraftMate Plans</h1>
+            <p>Mobile money, cards, and one-month trial</p>
+          </div>
+        </div>
+      </header>
+      <section id="plansMount" class="upgrade-grid"></section>
+      <section class="panel">
+        <h2>Mobile money checkout</h2>
+        <label for="phoneNumber">Phone number</label>
+        <input id="phoneNumber" type="tel" placeholder="+256700000000">
+        <label for="mobilePlan">Plan</label>
+        <select id="mobilePlan">
+          <option value="byo">BYO Key</option>
+          <option value="pro">Pro</option>
+          <option value="business">Business</option>
+        </select>
+        <label for="currencyCode">Currency</label>
+        <select id="currencyCode">
+          <option value="UGX">UGX</option>
+          <option value="KES">KES</option>
+          <option value="TZS">TZS</option>
+          <option value="RWF">RWF</option>
+          <option value="GHS">GHS</option>
+        </select>
+        <button id="mobileMoneyButton" class="primary-button" style="margin-top:10px">Pay with mobile money</button>
+        <p id="paymentMessage" class="muted" style="margin-top:10px"></p>
+      </section>
+      <footer><a href="../taskpane/taskpane.html">Back to DraftMate</a></footer>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign in - DraftMate</title>
+    <link rel="stylesheet" href="../taskpane/taskpane.css">
+    <script type="module" src="./auth.js"></script>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div class="brand">
+          <img src="../assets/logo.svg" alt="" width="38" height="38">
+          <div>
+            <h1>DraftMate</h1>
+            <p>AI writing inside Microsoft Word</p>
+          </div>
+        </div>
+      </header>
+
+      <section class="panel">
+        <div class="section-heading">
+          <h2>Account</h2>
+          <span class="muted">1 month trial included</span>
+        </div>
+        <label for="email">Email</label>
+        <input id="email" type="email" autocomplete="email" placeholder="you@example.com">
+        <label for="password">Password</label>
+        <input id="password" type="password" autocomplete="current-password" placeholder="At least 8 characters">
+        <div class="prompt-actions">
+          <button id="signupButton" class="primary-button">Create account</button>
+          <button id="loginButton" class="secondary-button">Sign in</button>
+        </div>
+        <p id="authMessage" class="muted" style="margin-top:10px"></p>
+      </section>
+
+      <section class="panel">
+        <h2>What is included</h2>
+        <p class="muted" style="margin-top:8px">Free users get 5 requests per day. Every new account receives a one-month trial of Pro features before choosing Free, BYO Key, Pro, or Business.</p>
+      </section>
+    </main>
+  </body>
+</html>
