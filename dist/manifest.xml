@@ -10,11 +10,11 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="DraftMate"/>
   <Description DefaultValue="AI writing assistant built for Microsoft Word users in East Africa."/>
-  <IconUrl DefaultValue="https://draftmate-six.vercel.app/assets/logo.svg"/>
-  <HighResolutionIconUrl DefaultValue="https://draftmate-six.vercel.app/assets/logo.svg"/>
-  <SupportUrl DefaultValue="https://draftmate-six.vercel.app"/>
+  <IconUrl DefaultValue="https://sadat934.github.io/draftmate/assets/logo.svg"/>
+  <HighResolutionIconUrl DefaultValue="https://sadat934.github.io/draftmate/assets/logo.svg"/>
+  <SupportUrl DefaultValue="https://sadat934.github.io/draftmate"/>
   <AppDomains>
-    <AppDomain>https://draftmate-six.vercel.app</AppDomain>
+    <AppDomain>https://sadat934.github.io</AppDomain>
     <AppDomain>https://api.openai.com</AppDomain>
     <AppDomain>https://api.anthropic.com</AppDomain>
     <AppDomain>https://api.mistral.ai</AppDomain>
@@ -23,7 +23,7 @@
     <Host Name="Document"/>
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://draftmate-six.vercel.app/index.html"/>
+    <SourceLocation DefaultValue="https://sadat934.github.io/draftmate/index.html"/>
   </DefaultSettings>
   <Permissions>ReadWriteDocument</Permissions>
   <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
@@ -69,14 +69,14 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="https://draftmate-six.vercel.app/assets/logo.svg"/>
-        <bt:Image id="Icon.32x32" DefaultValue="https://draftmate-six.vercel.app/assets/logo.svg"/>
-        <bt:Image id="Icon.80x80" DefaultValue="https://draftmate-six.vercel.app/assets/logo.svg"/>
+        <bt:Image id="Icon.16x16" DefaultValue="https://sadat934.github.io/draftmate/assets/logo.svg"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://sadat934.github.io/draftmate/assets/logo.svg"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://sadat934.github.io/draftmate/assets/logo.svg"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="Commands.Url" DefaultValue="https://draftmate-six.vercel.app/index.html"/>
-        <bt:Url id="Taskpane.Url" DefaultValue="https://draftmate-six.vercel.app/taskpane/taskpane.html"/>
-        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://draftmate-six.vercel.app"/>
+        <bt:Url id="Commands.Url" DefaultValue="https://sadat934.github.io/draftmate/index.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://sadat934.github.io/draftmate/taskpane/taskpane.html"/>
+        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://sadat934.github.io/draftmate"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GetStarted.Title" DefaultValue="DraftMate is ready"/>

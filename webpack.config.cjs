@@ -72,7 +72,7 @@ module.exports = {
       patterns: [
         { from: 'assets', to: 'assets' },
         { from: 'payments', to: 'payments' },
-        { from: 'manifest.xml', to: 'manifest.xml' }
+        { from: 'manifest.production.xml', to: 'manifest.xml' }
       ]
     })
   ],
