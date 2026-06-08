@@ -50,10 +50,18 @@
             <option value="openai">OpenAI</option>
             <option value="anthropic">Anthropic Claude</option>
             <option value="mistral">Mistral AI</option>
+            <option value="gemini">Google Gemini</option>
             <option value="openrouter">OpenRouter</option>
+            <option value="custom">Custom (OpenAI-compatible)</option>
           </select>
           <label for="byoKey">API key</label>
           <input id="byoKey" type="password" autocomplete="off" placeholder="Stored only in this browser">
+          <div id="customFields" style="display: none;">
+            <label for="byoModel">Model name</label>
+            <input id="byoModel" type="text" placeholder="e.g., gpt-4, claude-3-5-sonnet-latest">
+            <label for="byoEndpoint">API endpoint (optional)</label>
+            <input id="byoEndpoint" type="text" placeholder="e.g., https://api.openai.com/v1/chat/completions">
+          </div>
           <div class="row">
             <button id="saveByoKey" class="secondary-button">Save key</button>
             <button id="clearByoKey" class="ghost-button">Clear</button>

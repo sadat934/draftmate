@@ -38,8 +38,8 @@ export function getByoKey() {
   return read("byoKey");
 }
 
-export function setByoKey(provider, apiKey) {
-  write("byoKey", { provider, apiKey, savedAt: new Date().toISOString() });
+export function setByoKey(provider, apiKey, model = "", endpoint = "") {
+  write("byoKey", { provider, apiKey, model, endpoint, savedAt: new Date().toISOString() });
 }
 
 export function clearByoKey() {

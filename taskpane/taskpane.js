@@ -45,6 +45,11 @@ function renderShell() {
   if (byo) {
     document.querySelector("#byoProvider").value = byo.provider;
     document.querySelector("#byoKey").value = byo.apiKey;
+    if (byo.model) document.querySelector("#byoModel").value = byo.model;
+    if (byo.endpoint) document.querySelector("#byoEndpoint").value = byo.endpoint;
+    if (byo.provider === "custom") {
+      document.querySelector("#customFields").style.display = "block";
+    }
   }
 }
 
@@ -57,18 +62,30 @@ function bindEvents() {
     });
   });
 
+  document.querySelector("#byoProvider").addEventListener("change", (e) => {
+    const customFields = document.querySelector("#customFields");
+    customFields.style.display = e.target.value === "custom" ? "block" : "none";
+  });
+
   document.querySelector("#refreshSelection").addEventListener("click", refreshSelection);
   document.querySelector("#logoutButton").addEventListener("click", () => {
     clearSession();
     window.location.replace("../auth/login.html");
   });
   document.querySelector("#saveByoKey").addEventListener("click", () => {
-    setByoKey(document.querySelector("#byoProvider").value, document.querySelector("#byoKey").value.trim());
+    const provider = document.querySelector("#byoProvider").value;
+    const apiKey = document.querySelector("#byoKey").value.trim();
+    const model = document.querySelector("#byoModel").value.trim();
+    const endpoint = document.querySelector("#byoEndpoint").value.trim();
+    
+    setByoKey(provider, apiKey, model, endpoint);
     alert("BYO key saved locally in this browser.");
   });
   document.querySelector("#clearByoKey").addEventListener("click", () => {
     clearByoKey();
     document.querySelector("#byoKey").value = "";
+    document.querySelector("#byoModel").value = "";
+    document.querySelector("#byoEndpoint").value = "";
   });
 }
 
