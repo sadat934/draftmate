@@ -10,6 +10,14 @@ export async function requestByoModel(payload) {
     return callAnthropic(payload, byo.apiKey);
   }
 
+  if (byo.provider === "mistral") {
+    return callMistral(payload, byo.apiKey);
+  }
+
+  if (byo.provider === "openrouter") {
+    return callOpenRouter(payload, byo.apiKey);
+  }
+
   return callOpenAi(payload, byo.apiKey);
 }
 
@@ -60,5 +68,57 @@ async function callAnthropic(payload, apiKey) {
   return {
     provider: "Claude BYO",
     text: data.content?.map((part) => part.text || "").join("").trim() || ""
+  };
+}
+
+async function callMistral(payload, apiKey) {
+  const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`
+    },
+    body: JSON.stringify({
+      model: "mistral-small-latest",
+      messages: [
+        { role: "system", content: "You are DraftMate, a concise Microsoft Word writing assistant." },
+        { role: "user", content: payload.prompt }
+      ],
+      temperature: 0.4
+    })
+  });
+
+  if (!response.ok) throw new Error(await response.text());
+  const data = await response.json();
+  return {
+    provider: "Mistral BYO",
+    text: data.choices?.[0]?.message?.content?.trim() || ""
+  };
+}
+
+async function callOpenRouter(payload, apiKey) {
+  const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+      "HTTP-Referer": "https://sadat934.github.io/draftmate/",
+      "X-Title": "DraftMate"
+    },
+    body: JSON.stringify({
+      model: "anthropic/claude-3.5-haiku",
+      messages: [
+        { role: "system", content: "You are DraftMate, a concise Microsoft Word writing assistant." },
+        { role: "user", content: payload.prompt }
+      ],
+      temperature: 0.4
+    })
+  });
+
+  if (!response.ok) throw new Error(await response.text());
+  const data = await response.json();
+  return {
+    provider: "OpenRouter BYO",
+    text: data.choices?.[0]?.message?.content?.trim() || ""
   };
 }
