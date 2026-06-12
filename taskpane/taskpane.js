@@ -136,29 +136,38 @@ async function handlePrompt({ instruction, tone }) {
 }
 
 function renderResult() {
+  if (!currentResult) {
+    document.querySelector("#resultMount").innerHTML = "";
+    return;
+  }
+
+  const resultText = currentResult.text;
+  const resultRawText = currentResult.rawText;
+  const action = currentAction;
+
   renderResultCard(document.querySelector("#resultMount"), {
     result: currentResult,
     onInsert: async () => {
       try {
-        await insertAtCursor(currentResult.text);
+        await insertAtCursor(resultText);
       } catch (error) {
         showError(error.message);
       }
     },
     onReplace: async () => {
       try {
-        if (currentAction === "headings") {
-          await applyHeadingSuggestions(parseHeadingSuggestions(currentResult.rawText || currentResult.text));
+        if (action === "headings") {
+          await applyHeadingSuggestions(parseHeadingSuggestions(resultRawText || resultText));
           return;
         }
-        await replaceSelection(currentResult.text);
+        await replaceSelection(resultText);
       } catch (error) {
         showError(error.message);
       }
     },
     onInsertAfter: async () => {
       try {
-        await insertAfterSelection(currentResult.text);
+        await insertAfterSelection(resultText);
       } catch (error) {
         showError(error.message);
       }
