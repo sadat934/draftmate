@@ -34,14 +34,14 @@ function ensureSession() {
 
 function renderShell() {
   const session = getSession();
-  const plan = getPlan();
+  const byo = getByoKey();
+  const plan = byo?.apiKey ? "byo" : getPlan();
   const trialText = isTrialActive(session) ? " · trial active" : "";
   document.querySelector("#planLabel").textContent = `${CONFIG.plans[plan]?.label || "Free"} plan${trialText}`;
   renderRequestCounter(document.querySelector("#counterMount"), getUsage(plan));
   renderPromptBox(document.querySelector("#promptMount"), { onSubmit: handlePrompt });
   renderUpgrade(document.querySelector("#upgradeMount"), { visible: false });
 
-  const byo = getByoKey();
   if (byo) {
     document.querySelector("#byoProvider").value = byo.provider;
     document.querySelector("#byoKey").value = byo.apiKey;
@@ -101,8 +101,10 @@ async function refreshSelection() {
 
 async function handlePrompt({ instruction, tone }) {
   try {
-    const plan = getPlan();
+    const byo = getByoKey();
+    const plan = byo?.apiKey ? "byo" : getPlan();
     const usage = getUsage(plan);
+    
     if (!usage.allowed) {
       renderUpgrade(document.querySelector("#upgradeMount"), {
         visible: true,

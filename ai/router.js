@@ -1,4 +1,4 @@
-import { getPlan, getSession } from "../utils/storage.js";
+import { getPlan, getSession, getByoKey } from "../utils/storage.js";
 import { isTrialActive } from "../utils/tracker.js";
 import { requestFreeModel } from "./mistral.js";
 import { requestByoModel } from "./byokey.js";
@@ -6,12 +6,15 @@ import { requestPaidModel } from "./claude.js";
 
 export async function runAiTask(payload) {
   const session = getSession();
-  const plan = getPlan();
-  const effectivePlan = isTrialActive(session) && plan === "free" ? "pro" : plan;
-
-  if (effectivePlan === "byo") {
+  const byo = getByoKey();
+  
+  // If BYO key exists, use it regardless of plan
+  if (byo?.apiKey) {
     return requestByoModel(payload);
   }
+
+  const plan = getPlan();
+  const effectivePlan = isTrialActive(session) && plan === "free" ? "pro" : plan;
 
   if (effectivePlan === "pro" || effectivePlan === "business") {
     return requestPaidModel({ ...payload, plan: effectivePlan });
