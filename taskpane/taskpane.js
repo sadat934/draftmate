@@ -138,15 +138,31 @@ async function handlePrompt({ instruction, tone }) {
 function renderResult() {
   renderResultCard(document.querySelector("#resultMount"), {
     result: currentResult,
-    onInsert: () => insertAtCursor(currentResult.text),
-    onReplace: async () => {
-      if (currentAction === "headings") {
-        await applyHeadingSuggestions(parseHeadingSuggestions(currentResult.rawText || currentResult.text));
-        return;
+    onInsert: async () => {
+      try {
+        await insertAtCursor(currentResult.text);
+      } catch (error) {
+        showError(error.message);
       }
-      await replaceSelection(currentResult.text);
     },
-    onInsertAfter: () => insertAfterSelection(currentResult.text),
+    onReplace: async () => {
+      try {
+        if (currentAction === "headings") {
+          await applyHeadingSuggestions(parseHeadingSuggestions(currentResult.rawText || currentResult.text));
+          return;
+        }
+        await replaceSelection(currentResult.text);
+      } catch (error) {
+        showError(error.message);
+      }
+    },
+    onInsertAfter: async () => {
+      try {
+        await insertAfterSelection(currentResult.text);
+      } catch (error) {
+        showError(error.message);
+      }
+    },
     onDiscard: () => {
       currentResult = null;
       renderResult();
