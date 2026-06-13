@@ -7597,17 +7597,45 @@ function _insertAtCursor() {
         case 0:
           return _context7.a(2, runWord(/*#__PURE__*/function () {
             var _ref3 = document_asyncToGenerator(/*#__PURE__*/document_regenerator().m(function _callee6(context) {
-              var selection;
+              var searchResults, foundRange, selection;
               return document_regenerator().w(function (_context6) {
                 while (1) switch (_context6.n) {
                   case 0:
-                    // "Before" inserts the text before the current selection/cursor
-                    // without replacing or disturbing the selected text.
-                    selection = context.document.getSelection();
-                    selection.insertText(text, "Before");
+                    if (!lastSelection.text) {
+                      _context6.n = 3;
+                      break;
+                    }
+                    searchResults = context.document.body.search(lastSelection.text, {
+                      matchCase: true,
+                      matchWholeWord: false
+                    });
+                    searchResults.load("items");
                     _context6.n = 1;
                     return context.sync();
                   case 1:
+                    if (!(searchResults.items.length > 0)) {
+                      _context6.n = 3;
+                      break;
+                    }
+                    foundRange = searchResults.items[0]; // Insert a new paragraph before the found range (same approach as After).
+                    foundRange.insertParagraph(text, "Before");
+                    _context6.n = 2;
+                    return context.sync();
+                  case 2:
+                    // Clear the stored selection after use
+                    lastSelection = {
+                      text: "",
+                      startIndex: -1,
+                      length: 0
+                    };
+                    return _context6.a(2);
+                  case 3:
+                    // Fallback: insert a new paragraph before the current selection
+                    selection = context.document.getSelection();
+                    selection.insertParagraph(text, "Before");
+                    _context6.n = 4;
+                    return context.sync();
+                  case 4:
                     return _context6.a(2);
                 }
               }, _callee6);

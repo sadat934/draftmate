@@ -47,10 +47,32 @@ export async function getDocumentText() {
 
 export async function insertAtCursor(text) {
   return runWord(async (context) => {
-    // "Before" inserts the text before the current selection/cursor
-    // without replacing or disturbing the selected text.
+    // Use stored selection info to find and insert before the text.
+    // We cannot use context.document.getSelection() here because by the time
+    // the user clicks Insert, focus has moved to the taskpane and the live
+    // selection is lost — this mirrors how Replace and After work.
+    if (lastSelection.text) {
+      const searchResults = context.document.body.search(lastSelection.text, {
+        matchCase: true,
+        matchWholeWord: false
+      });
+      searchResults.load("items");
+      await context.sync();
+
+      if (searchResults.items.length > 0) {
+        const foundRange = searchResults.items[0];
+        // Insert a new paragraph before the found range (same approach as After).
+        foundRange.insertParagraph(text, "Before");
+        await context.sync();
+        // Clear the stored selection after use
+        lastSelection = { text: "", startIndex: -1, length: 0 };
+        return;
+      }
+    }
+
+    // Fallback: insert a new paragraph before the current selection
     const selection = context.document.getSelection();
-    selection.insertText(text, "Before");
+    selection.insertParagraph(text, "Before");
     await context.sync();
   });
 }
