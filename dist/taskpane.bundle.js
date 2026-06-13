@@ -7618,16 +7618,12 @@ function _insertAtCursor() {
                       break;
                     }
                     foundRange = searchResults.items[0]; // Insert a new paragraph before the found range (same approach as After).
+                    // Do NOT clear lastSelection — the original text is still in the document,
+                    // so the user can still use Replace or After on the same selection.
                     foundRange.insertParagraph(text, "Before");
                     _context6.n = 2;
                     return context.sync();
                   case 2:
-                    // Clear the stored selection after use
-                    lastSelection = {
-                      text: "",
-                      startIndex: -1,
-                      length: 0
-                    };
                     return _context6.a(2);
                   case 3:
                     // Fallback: insert a new paragraph before the current selection
@@ -7732,7 +7728,7 @@ function _insertAfterSelection() {
         case 0:
           return _context1.a(2, runWord(/*#__PURE__*/function () {
             var _ref5 = document_asyncToGenerator(/*#__PURE__*/document_regenerator().m(function _callee0(context) {
-              var searchResults, foundRange, newPara, selection;
+              var searchResults, foundRange, selection;
               return document_regenerator().w(function (_context0) {
                 while (1) switch (_context0.n) {
                   case 0:
@@ -7753,19 +7749,14 @@ function _insertAfterSelection() {
                       _context0.n = 3;
                       break;
                     }
-                    foundRange = searchResults.items[0]; // Insert a new paragraph after the found range, then insert the text into it.
-                    // Using insertParagraph creates a true paragraph break (not just \n) in Word Online.
-                    newPara = foundRange.insertParagraph(text, "After");
-                    newPara.load("text");
+                    foundRange = searchResults.items[0]; // Insert a new paragraph after the found range.
+                    // insertParagraph creates a true paragraph break in Word Online.
+                    // Do NOT clear lastSelection — the original text is still in the document,
+                    // so the user can still use Replace or Insert on the same selection.
+                    foundRange.insertParagraph(text, "After");
                     _context0.n = 2;
                     return context.sync();
                   case 2:
-                    // Clear the stored selection after use
-                    lastSelection = {
-                      text: "",
-                      startIndex: -1,
-                      length: 0
-                    };
                     return _context0.a(2);
                   case 3:
                     // Fallback: insert a new paragraph after the current cursor/selection

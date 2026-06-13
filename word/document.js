@@ -62,10 +62,10 @@ export async function insertAtCursor(text) {
       if (searchResults.items.length > 0) {
         const foundRange = searchResults.items[0];
         // Insert a new paragraph before the found range (same approach as After).
+        // Do NOT clear lastSelection — the original text is still in the document,
+        // so the user can still use Replace or After on the same selection.
         foundRange.insertParagraph(text, "Before");
         await context.sync();
-        // Clear the stored selection after use
-        lastSelection = { text: "", startIndex: -1, length: 0 };
         return;
       }
     }
@@ -127,13 +127,12 @@ export async function insertAfterSelection(text) {
 
       if (searchResults.items.length > 0) {
         const foundRange = searchResults.items[0];
-        // Insert a new paragraph after the found range, then insert the text into it.
-        // Using insertParagraph creates a true paragraph break (not just \n) in Word Online.
-        const newPara = foundRange.insertParagraph(text, "After");
-        newPara.load("text");
+        // Insert a new paragraph after the found range.
+        // insertParagraph creates a true paragraph break in Word Online.
+        // Do NOT clear lastSelection — the original text is still in the document,
+        // so the user can still use Replace or Insert on the same selection.
+        foundRange.insertParagraph(text, "After");
         await context.sync();
-        // Clear the stored selection after use
-        lastSelection = { text: "", startIndex: -1, length: 0 };
         return;
       }
     }
