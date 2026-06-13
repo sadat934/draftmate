@@ -7601,8 +7601,10 @@ function _insertAtCursor() {
               return document_regenerator().w(function (_context6) {
                 while (1) switch (_context6.n) {
                   case 0:
+                    // "Before" inserts the text before the current selection/cursor
+                    // without replacing or disturbing the selected text.
                     selection = context.document.getSelection();
-                    selection.insertText(text, "Replace");
+                    selection.insertText(text, "Before");
                     _context6.n = 1;
                     return context.sync();
                   case 1:
@@ -7702,7 +7704,7 @@ function _insertAfterSelection() {
         case 0:
           return _context1.a(2, runWord(/*#__PURE__*/function () {
             var _ref5 = document_asyncToGenerator(/*#__PURE__*/document_regenerator().m(function _callee0(context) {
-              var searchResults, selection;
+              var searchResults, foundRange, newPara, selection;
               return document_regenerator().w(function (_context0) {
                 while (1) switch (_context0.n) {
                   case 0:
@@ -7723,8 +7725,10 @@ function _insertAfterSelection() {
                       _context0.n = 3;
                       break;
                     }
-                    // Insert after the first occurrence
-                    searchResults.items[0].insertText("\n".concat(text), "After");
+                    foundRange = searchResults.items[0]; // Insert a new paragraph after the found range, then insert the text into it.
+                    // Using insertParagraph creates a true paragraph break (not just \n) in Word Online.
+                    newPara = foundRange.insertParagraph(text, "After");
+                    newPara.load("text");
                     _context0.n = 2;
                     return context.sync();
                   case 2:
@@ -7736,9 +7740,9 @@ function _insertAfterSelection() {
                     };
                     return _context0.a(2);
                   case 3:
-                    // Fallback: try to use current selection
+                    // Fallback: insert a new paragraph after the current cursor/selection
                     selection = context.document.getSelection();
-                    selection.insertText("\n".concat(text), "After");
+                    selection.insertParagraph(text, "After");
                     _context0.n = 4;
                     return context.sync();
                   case 4:

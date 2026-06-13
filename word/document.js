@@ -47,8 +47,10 @@ export async function getDocumentText() {
 
 export async function insertAtCursor(text) {
   return runWord(async (context) => {
+    // "Before" inserts the text before the current selection/cursor
+    // without replacing or disturbing the selected text.
     const selection = context.document.getSelection();
-    selection.insertText(text, "Replace");
+    selection.insertText(text, "Before");
     await context.sync();
   });
 }
@@ -100,20 +102,23 @@ export async function insertAfterSelection(text) {
       });
       searchResults.load("items");
       await context.sync();
-      
+
       if (searchResults.items.length > 0) {
-        // Insert after the first occurrence
-        searchResults.items[0].insertText(`\n${text}`, "After");
+        const foundRange = searchResults.items[0];
+        // Insert a new paragraph after the found range, then insert the text into it.
+        // Using insertParagraph creates a true paragraph break (not just \n) in Word Online.
+        const newPara = foundRange.insertParagraph(text, "After");
+        newPara.load("text");
         await context.sync();
         // Clear the stored selection after use
         lastSelection = { text: "", startIndex: -1, length: 0 };
         return;
       }
     }
-    
-    // Fallback: try to use current selection
+
+    // Fallback: insert a new paragraph after the current cursor/selection
     const selection = context.document.getSelection();
-    selection.insertText(`\n${text}`, "After");
+    selection.insertParagraph(text, "After");
     await context.sync();
   });
 }
