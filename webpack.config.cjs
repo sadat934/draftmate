@@ -2,8 +2,11 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-module.exports = {
-  mode: 'development',
+module.exports = (env, argv) => {
+  const isProduction = argv.mode === 'production';
+  
+  return {
+  mode: argv.mode || 'development',
   entry: {
     taskpane: './taskpane/taskpane.js',
     'auth/login': './auth/auth.js'
@@ -12,6 +15,9 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
     clean: true
+  },
+  optimization: {
+    minimize: false
   },
   devServer: {
     static: {
@@ -76,5 +82,6 @@ module.exports = {
   resolve: {
     extensions: ['.js']
   },
-  devtool: 'source-map'
+  devtool: isProduction ? 'source-map' : 'eval-source-map'
+};
 };
