@@ -1,1 +1,37 @@
-import{CONFIG}from"../utils/config.js";import{startMobileMoneyCheckout}from"./mobilemoney.js";import{startStripeCheckout}from"./stripe.js";const mount=document.querySelector("#plansMount"),plans=Object.values(CONFIG.plans);mount.innerHTML=plans.map(t=>`\n  <article class="panel">\n    <div class="section-heading">\n      <h2>${t.label}</h2>\n      <strong>$${t.monthlyUsd}/mo</strong>\n    </div>\n    <p class="muted">UGX ${t.monthlyUgx.toLocaleString()} · ${t.model}</p>\n    <p class="muted" style="margin-top:6px">${t.features.join(" · ")}</p>\n    ${"free"===t.id?"":`<button data-stripe-plan="${t.id}" class="secondary-button" style="margin-top:10px">Start 1 month trial with card</button>`}\n  </article>\n`).join(""),document.querySelectorAll("[data-stripe-plan]").forEach(t=>{t.addEventListener("click",()=>startStripeCheckout(t.dataset.stripePlan))}),document.querySelector("#mobileMoneyButton").addEventListener("click",async()=>{const t=document.querySelector("#paymentMessage");try{t.textContent="Starting mobile money checkout...";const e=await startMobileMoneyCheckout({phoneNumber:document.querySelector("#phoneNumber").value.trim(),plan:document.querySelector("#mobilePlan").value,currencyCode:document.querySelector("#currencyCode").value});t.textContent=`Checkout ${e.status||"started"}: ${e.transactionId||"awaiting confirmation"}`}catch(e){t.textContent=e.message}});
+import { CONFIG } from "../utils/config.js";
+import { startMobileMoneyCheckout } from "./mobilemoney.js";
+import { startStripeCheckout } from "./stripe.js";
+
+const mount = document.querySelector("#plansMount");
+const plans = Object.values(CONFIG.plans);
+
+mount.innerHTML = plans.map((plan) => `
+  <article class="panel">
+    <div class="section-heading">
+      <h2>${plan.label}</h2>
+      <strong>$${plan.monthlyUsd}/mo</strong>
+    </div>
+    <p class="muted">UGX ${plan.monthlyUgx.toLocaleString()} · ${plan.model}</p>
+    <p class="muted" style="margin-top:6px">${plan.features.join(" · ")}</p>
+    ${plan.id === "free" ? "" : `<button data-stripe-plan="${plan.id}" class="secondary-button" style="margin-top:10px">Start 1 month trial with card</button>`}
+  </article>
+`).join("");
+
+document.querySelectorAll("[data-stripe-plan]").forEach((button) => {
+  button.addEventListener("click", () => startStripeCheckout(button.dataset.stripePlan));
+});
+
+document.querySelector("#mobileMoneyButton").addEventListener("click", async () => {
+  const message = document.querySelector("#paymentMessage");
+  try {
+    message.textContent = "Starting mobile money checkout...";
+    const result = await startMobileMoneyCheckout({
+      phoneNumber: document.querySelector("#phoneNumber").value.trim(),
+      plan: document.querySelector("#mobilePlan").value,
+      currencyCode: document.querySelector("#currencyCode").value
+    });
+    message.textContent = `Checkout ${result.status || "started"}: ${result.transactionId || "awaiting confirmation"}`;
+  } catch (error) {
+    message.textContent = error.message;
+  }
+});
